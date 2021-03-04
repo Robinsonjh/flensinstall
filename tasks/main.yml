@@ -12,10 +12,9 @@
     state: present
   register: nagios_installed
 
-
 - name: Copy config file
   copy:
-    src: telegraf.conf
+    src: telegraf.conf.{{ ansible_hostname }}
     dest: /usr/bin/telegraf/telegraf.conf
 
 
