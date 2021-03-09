@@ -2,21 +2,29 @@
 # tasks file for flens
 - name: Copy Telegraf from file [RHEL/CentOS]
   copy:
-    src: telegraf-1.17.3-1.i386.rpm
+    src: telegraf-1.17.3-1.x86_64.rpm
     dest: /tmp
-    
 
 - name: Install Telegraf rpm from a local file
   yum:
     name: /tmp/telegraf-1.17.3-1.x86_64.rpm
     state: present
-  register: nagios_installed
+  register: flens_installed
 
 - name: Copy config file
   copy:
     src: telegraf.conf.{{ ansible_hostname }}
-    dest: /usr/bin/telegraf/telegraf.conf
+    dest: /etc/telegraf/telegraf.conf
 
+- name: Copy linux config file
+  copy:
+    src: linux.conf.{{ ansible_hostname }}
+    dest: /etc/telegraf/telegraf.d/linux.conf
+
+- name: remove rpm file
+  file:
+    state: absent
+    dest: /tmp/telegraf-1.17.3-1.x86_64.rpm
 
 - name: Enable Telegraf
   service:
